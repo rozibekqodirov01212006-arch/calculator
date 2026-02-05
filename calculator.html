@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scientific Calculator Pro</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.calculator {
+    backdrop-filter: blur(15px);
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+    padding: 20px;
+    width: 100%;
+    max-width: 360px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+.display {
+    width: 100%;
+    height: 65px;
+    font-size: 26px;
+    border-radius: 15px;
+    border: none;
+    padding: 10px;
+    text-align: right;
+    background: rgba(0,0,0,0.4);
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+}
+
+button {
+    height: 52px;
+    border-radius: 14px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    background: rgba(255,255,255,0.18);
+    color: white;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: rgba(255,255,255,0.35);
+}
+
+.func { background: rgba(14,165,233,0.5); }
+.op { background: rgba(245,158,11,0.6); }
+.equal {
+    grid-column: span 2;
+    background: rgba(34,197,94,0.7);
+}
+.clear { background: rgba(239,68,68,0.7); }
+
+@media (max-width: 400px) {
+    .display { font-size: 22px; height: 55px; }
+    button { height: 46px; font-size: 14px; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="calculator">
+    <input id="display" class="display" disabled>
+
+    <div class="buttons">
+        <button class="clear" onclick="clearAll()">C</button>
+        <button onclick="append('(')">(</button>
+        <button onclick="append(')')">)</button>
+        <button onclick="append('/')">÷</button>
+        <button onclick="append('*')">×</button>
+
+        <button class="func" onclick="func('sin')">sin</button>
+        <button class="func" onclick="func('cos')">cos</button>
+        <button class="func" onclick="func('tan')">tan</button>
+        <button class="func" onclick="sqrt()">√</button>
+        <button class="func" onclick="square()">x²</button>
+
+        <button onclick="append('7')">7</button>
+        <button onclick="append('8')">8</button>
+        <button onclick="append('9')">9</button>
+        <button class="op" onclick="append('-')">−</button>
+        <button class="op" onclick="append('+')">+</button>
+
+        <button onclick="append('4')">4</button>
+        <button onclick="append('5')">5</button>
+        <button onclick="append('6')">6</button>
+        <button onclick="append('1')">1</button>
+        <button onclick="append('2')">2</button>
+
+        <button onclick="append('3')">3</button>
+        <button onclick="append('0')">0</button>
+        <button onclick="append('.')">.</button>
+        <button onclick="append('Math.PI')">π</button>
+        <button class="equal" onclick="calculate()">=</button>
+    </div>
+</div>
+
+<script>
+const display = document.getElementById("display");
+
+function append(v) { display.value += v; }
+function clearAll() { display.value = ""; }
+function func(f) { display.value += `Math.${f}(`; }
+function sqrt() { display.value += "Math.sqrt("; }
+function square() { display.value += "**2"; }
+
+function calculate() {
+    try {
+        display.value = Function("return " + display.value)();
+    } catch {
+        display.value = "Xato!";
+    }
+}
+
+/* ⌨️ KLAVIATURA BOSHQARUVI */
+document.addEventListener("keydown", e => {
+    if ("0123456789.+-*/()".includes(e.key)) append(e.key);
+    if (e.key === "Enter") calculate();
+    if (e.key === "Backspace")
+        display.value = display.value.slice(0, -1);
+    if (e.key === "Escape") clearAll();
+});
+</script>
+
+</body>
+</html>
